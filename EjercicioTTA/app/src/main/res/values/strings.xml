@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EjercicioTTA</string>
+
+    <string name="usuario">Usuario</string>
+    <string name="passwd">Contraseña</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_menu">Evaluacion de TTA</string>
+    <string name="title_activity_test">Nuevo Test</string>
+    <string name="title_activity_exercise">Nuevo Ejercicio</string>
+</resources>
