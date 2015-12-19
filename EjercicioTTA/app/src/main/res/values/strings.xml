@@ -8,4 +8,8 @@
     <string name="title_activity_menu">Evaluacion de TTA</string>
     <string name="title_activity_test">Nuevo Test</string>
     <string name="title_activity_exercise">Nuevo Ejercicio</string>
+
+    <string name="button_send">Enviar</string>
+    <string name="button_advise">Ver ayuda</string>
+
 </resources>

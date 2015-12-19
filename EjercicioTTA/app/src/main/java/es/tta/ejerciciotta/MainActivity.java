@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
         EditText login=(EditText)findViewById(R.id.login);
         EditText passwd=(EditText)findViewById(R.id.passwd);
 
+        //Si ambos campos (LOGIN y PASSWD estan completados se pasa a la siguiente Activity
         if(!TextUtils.isEmpty(login.getText().toString())&&!TextUtils.isEmpty(passwd.getText().toString())){
             i.putExtra(LOGIN,login.getText().toString());
             i.putExtra(PASSWD,passwd.getText().toString());
