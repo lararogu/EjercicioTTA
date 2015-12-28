@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * Created by LARA MARIA on 19/12/2015.
  */
-public abstract class AudioPlayer
+public class AudioPlayer
         implements MediaController.MediaPlayerControl, MediaPlayer.OnPreparedListener{
 
     private View view;
@@ -21,15 +21,15 @@ public abstract class AudioPlayer
     public AudioPlayer(View view){
         this.view=view;
         player=new MediaPlayer();
-        player.setOnPreparedListener(this);
+        player.setOnPreparedListener(this);//llama al metodo onPrepared()
         controller=new MediaController(view.getContext()){
 
             @Override
             public boolean dispatchKeyEvent(KeyEvent event){
                 if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
 
-                    release();//Si mientras se visualiza el video se va hacia atras,la reproduccion del video finaliza
-                    //onExit.run();
+                    release();//Si mientras se escucha el audio se va hacia atras,la reproduccion del audio finaliza
+
                 }
                 return super.dispatchKeyEvent(event);
 
@@ -53,7 +53,7 @@ public abstract class AudioPlayer
             player=null;
         }
     }
-
+    @Override
     public void onPrepared(MediaPlayer mp){
         controller.setMediaPlayer(this);
         controller.setAnchorView(view);
@@ -68,7 +68,50 @@ public abstract class AudioPlayer
         player.pause();
     }
 
+    @Override
+    public int getDuration() {
+        return player.getDuration();
+    }
 
+    @Override
+    public int getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
+    @Override
+    public void seekTo(int pos) {
+        player.seekTo(pos);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return (player.getCurrentPosition()*100)/player.getDuration();
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return false;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return false;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return player.getAudioSessionId();
+    }
 
 
 }

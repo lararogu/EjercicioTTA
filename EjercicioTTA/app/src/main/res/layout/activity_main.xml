@@ -18,7 +18,7 @@
             android:id="@+id/login"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:hint="Introduce usuario"
+            android:hint="Introduce DNI"
             />
 
         <TextView android:text="@string/passwd" android:layout_width="wrap_content"

@@ -20,6 +20,8 @@ import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.MediaController;
 
+import java.io.IOException;
+
 
 public class TestActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -32,7 +34,7 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
 
 
         //Creamos un objeto tipo Data
-        Data data=new Data();
+        Data data=new Data();//business
         //Obtenemos el metodo getTest definido en la clase Data()
         Test test=data.getTest();
         TextView textWording=(TextView)findViewById(R.id.test_wording);
@@ -102,7 +104,7 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
                 break;
 
             case "audio":
-                showAudio(v,myadvise.advise);
+                showAudio(myadvise.advise);
                 break;
         }
 
@@ -153,14 +155,23 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
 
         controller.setAnchorView(video);
         video.setMediaController(controller);
-        LinearLayout layout=(LinearLayout)findViewById(R.id.test_layout);
-        layout.addView(video);
+        LinearLayout layout=(LinearLayout)findViewById(R.id.test_layout);//buscamos el layout de la pantalla de test
+        layout.addView(video);//Le añadimos la vista para el video
         video.start();
     }
 //-----------------------------------------------------------------------------------------//
 
-    public void showAudio(View v,String advise){
-        //AudioPlayer audio=new AudioPlayer(v);
+    public void showAudio(String advise){
+        View view=new View(this);
+        AudioPlayer audio=new AudioPlayer(view);
+        try {
+            audio.setAudioUri(Uri.parse(advise));
+        }
+        catch(IOException e) {
+        }
+        LinearLayout layout=(LinearLayout)findViewById(R.id.test_layout);//buscamos el layout de la pantalla de test
+        layout.addView(view);//Le añadimos la vista para el video
+        audio.start();
 
 
     }
