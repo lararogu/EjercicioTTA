@@ -1,5 +1,6 @@
 package es.tta.ejerciciotta;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -44,7 +45,9 @@ public class Business {
         exercise.setId(json.getInt("id"));
         exercise.setWording(json.getString("wording"));
 
+
         return exercise;
     }
+
 
 }

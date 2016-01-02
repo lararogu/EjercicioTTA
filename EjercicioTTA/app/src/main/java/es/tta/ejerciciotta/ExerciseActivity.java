@@ -16,9 +16,13 @@ import android.content.Intent;
 
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
 
 public class ExerciseActivity extends ActionBarActivity {
 
@@ -26,27 +30,15 @@ public class ExerciseActivity extends ActionBarActivity {
     public final static int PICTURE_REQUEST_CODE=1;
     public final static int VIDEO_REQUEST_CODE=2;
     public final static int AUDIO_REQUEST_CODE=3;
-    public final RestClient rest=new RestClient("http://u017633.ehu.eus:18080/AlumnoTta/rest/tta");
+
     Uri  pictureUri;
-    Exercise exercise=new Exercise();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        Business business=new Business(rest);
-        try{
-        exercise=business.getExercise(1);
-        }
-        catch(IOException e){
-            }
-        catch (JSONException j){
-
-        }
-        Toast.makeText(getApplicationContext(), exercise.getWording(), Toast.LENGTH_SHORT).show();
-        TextView textWording=(TextView)findViewById(R.id.exercise_wording);
-        textWording.setText(exercise.getWording());
     }
 
 //--------------------------------------------------------------------//

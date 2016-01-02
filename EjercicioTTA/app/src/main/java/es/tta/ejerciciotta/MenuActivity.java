@@ -1,15 +1,20 @@
 package es.tta.ejerciciotta;
 
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MenuActivity extends ActionBarActivity {
+public class MenuActivity extends ModelActivity {
+    public final RestClient rest=new RestClient(baseURL);
+    Business business=new Business(rest);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,7 @@ public class MenuActivity extends ActionBarActivity {
         Intent i=getIntent();
         String usuario=i.getStringExtra(MainActivity.LOGIN);
         textMessage.setText("Bienvenido "+usuario);
+        rest.setHttpBasicAuth(usuario,MainActivity.PASSWD);//se guarda el user y passwd en la cabecera de autenticacion del mensaje http
 
     }
 
@@ -34,8 +40,20 @@ public class MenuActivity extends ActionBarActivity {
 
     //Funcion que accede a la pantalla ExerciseActivity
     public void exercise(View view){
-        Intent i=new Intent(this,ExerciseActivity.class);
-        startActivity(i);
+        new ProgressTask<Exercise>(this){
+            @Override
+        protected Exercise work()throws Exception{
+                return business.getExercise(1);//devuelve el enunciado del ejercicio
+            }
+            @Override
+            public void onFinish(Exercise result){
+                TextView textWording=(TextView)findViewById(R.id.exercise_wording);
+                textWording.setText(result.getWording());
+                startModelActivity(ExerciseActivity.class);
+                Toast.makeText(getApplicationContext(), "onFinish", Toast.LENGTH_SHORT).show();
+            }
+        }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
+
     }
 
     @Override

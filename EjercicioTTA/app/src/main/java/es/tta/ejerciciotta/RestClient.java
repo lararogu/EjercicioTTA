@@ -1,5 +1,6 @@
 package es.tta.ejerciciotta;
 
+import android.annotation.TargetApi;
 import android.util.Base64;
 
 import org.json.JSONException;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import android.util.Log;
 /**
  * Created by LARA MARIA on 28/12/2015.
  */
@@ -19,7 +21,7 @@ public class RestClient {
     private final static String AUTH="Authorization";
     private final String baseURL;
     private final Map<String,String> properties=new HashMap<>();
-
+    private static final String TAG = "MyActivity";
     public RestClient(String baseURL){
         this.baseURL=baseURL;
 
@@ -39,7 +41,7 @@ public class RestClient {
     }
 
     public void setProperty(String name,String value){
-        properties.put(name,value);
+        properties.put(name, value);
     }
 
     //-------Crea la conexion con la URL que se le indica-------------------------------------------------//
@@ -59,24 +61,34 @@ public class RestClient {
     }
 //-------------------------------------------------------------------------------------------------//
 
- public String getString(String path)throws IOException{
-     HttpURLConnection conn=null;
-     StringBuilder  content=new StringBuilder();
-         conn = getConnection(path);
-         try {
-             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-             while( br.readLine()!=null)
-                content.append(br.readLine());
-         }
-         catch(IOException e){
+ public String getString(String path)throws IOException {
+     HttpURLConnection conn = null;
+    String contents = new String();
+    try {
+        conn = getConnection(path);
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Connection", "Keep-Alive");
+        conn.setDoOutput(false);
+        Log.d("tag", "Lara: conexion");
 
+        int a=conn.getResponseCode();
+        Log.d("tag", "getResponseCode:" +a);
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+        contents += br.readLine();
+
+    }
+    catch(IOException i){
+        i.printStackTrace();
+    }
+     finally {
+             if (conn != null) {
+                 conn.disconnect();
+                 Log.d("tag", "LARA:disconect ");
+             }
+             return contents;
          }
 
-     finally{
-         if(conn!=null)
-             conn.disconnect();
-             return content.toString();
-     }
  }
 //----------------------------------------------------------------------------------//
 
