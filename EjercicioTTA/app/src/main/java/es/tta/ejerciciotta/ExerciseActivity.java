@@ -39,6 +39,11 @@ public class ExerciseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
+        Intent i=getIntent();
+        String value=i.getStringExtra(MenuActivity.VALUE);
+        TextView textWording=(TextView)findViewById(R.id.exercise_wording);
+        textWording.setText(value);
+
     }
 
 //--------------------------------------------------------------------//
@@ -75,7 +80,8 @@ public class ExerciseActivity extends ActionBarActivity {
         switch(requestCode){
             case READ_REQUEST_CODE:
                 String Fpath = data.getDataString();
-                Toast.makeText(this,Fpath, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(this,Fpath, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"senddata", Toast.LENGTH_SHORT).show();
                 break;
             case VIDEO_REQUEST_CODE:
             case AUDIO_REQUEST_CODE:

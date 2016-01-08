@@ -8,8 +8,10 @@ import org.json.JSONObject;
 public class Test {
 
     //RestClient rest=new RestClient("http://u017633.ehu.eus:18080/AlumnoTta/rest/tta");
-    String wording;
-   String id;
+    String wording="Enunciado primera pregunta";
+    String id;
+   // private Choice[] choices;
+
     //String advise="http://www.wikipedia.com";
     //String advise="<html><body>Fallooooo</body></html>";
 
@@ -38,8 +40,12 @@ public class Test {
     }
 
     public Choice[] getchoices(){
+        Choice[] choices=new Choice[4];
+        choices[0]=new Choice("Respuesta1",true);
+        choices[1]=new Choice("Respuesta2",false);
+        choices[2]=new Choice("Respuesta3",false);
+        choices[3]=new Choice("Respuesta4",false);
 
-        Choice [] choices = new Choice[4];
         return choices;
     }
 
@@ -48,11 +54,13 @@ public class Test {
     public static class Choice{
         String wording;
         boolean correct;
-        int id;
-        String advise;
+       // int id;
+        //String advise;
 
 
-        public Choice(){
+        public Choice(String wording,boolean correct){
+            this.wording=wording;
+            this.correct=correct;
         }
 
         public String getwording(){
@@ -66,22 +74,20 @@ public class Test {
             this.wording=wording;
         }
 
+        /*
         public void setId(int id){
             this.id=id;
-        }
+        }*/
 
         public void setCorrect(Boolean correct){
             this.correct=correct;
         }
-
+/*
         public void setAdvise(String advise){
             this.advise=advise;
-        }
+        }*/
 
-        public void add(Choice choice){
-            //Choice [] choices = new Choice[];
 
-        }
     }
 
     public class Advise{

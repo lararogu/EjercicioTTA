@@ -3,6 +3,7 @@ package es.tta.ejerciciotta;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -13,6 +14,7 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
     protected final Context context;
     private final ProgressDialog dialog;
     private Exception e;
+
 
 
     public ProgressTask (Context context){
@@ -34,6 +36,7 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
         }
         catch(Exception e){
             this.e=e;
+
         }
         return result;
     }
@@ -47,7 +50,9 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         else
+            Log.d("tag", "Lara:ejecutar onFinish");
             onFinish(result);
+            Log.d("tag", "Lara:onfinish");
     }
 
     protected abstract T work() throws Exception;

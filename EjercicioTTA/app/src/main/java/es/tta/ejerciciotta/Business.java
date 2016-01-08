@@ -1,5 +1,6 @@
 package es.tta.ejerciciotta;
 
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ public class Business {
         this.rest=rest;
     }
 
-    public Test getTest(int id)throws IOException,JSONException{
+   /* public Test getTest(int id)throws IOException,JSONException{
         JSONObject json=rest.getJson(String.format("getTest?id=%d",id));//Recogemos el test en formato JSON
         Test test=new Test();
         test.setId(json.getString("id"));
@@ -33,14 +34,15 @@ public class Business {
             choice.setwording(item.getString("wording"));
             choice.setCorrect(item.getBoolean("correct"));
             choice.setAdvise(item.optString("advise", null));
-           // test.getchoices().add(choice);
+            test.getchoices();
         }
         return test;
-    }
+    }*/
 
 
     public Exercise getExercise(int id)throws IOException,JSONException{
         JSONObject json=rest.getJson(String.format("getExercise?id=%d",id));//Recogemos el ejercicio en formato JSON
+
         Exercise exercise=new Exercise();
         exercise.setId(json.getInt("id"));
         exercise.setWording(json.getString("wording"));

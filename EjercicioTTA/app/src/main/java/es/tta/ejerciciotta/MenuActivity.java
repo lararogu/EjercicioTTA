@@ -16,6 +16,7 @@ public class MenuActivity extends ModelActivity {
     public final RestClient rest=new RestClient(baseURL);
     Business business=new Business(rest);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +28,28 @@ public class MenuActivity extends ModelActivity {
         //Obtenemos del intent el nombre de usuario introducido en la pantalla de login
         Intent i=getIntent();
         String usuario=i.getStringExtra(MainActivity.LOGIN);
-        textMessage.setText("Bienvenido "+usuario);
-        rest.setHttpBasicAuth(usuario,MainActivity.PASSWD);//se guarda el user y passwd en la cabecera de autenticacion del mensaje http
+        String passwd=i.getStringExtra(MainActivity.PASSWD);
+        textMessage.setText("Bienvenido " + usuario);
+        rest.setHttpBasicAuth(usuario, passwd); //se guarda el user y passwd en la cabecera de autenticacion del mensaje http
+
 
     }
 
     //Funcion que accede a la pantalla TestActivity
     public void test(View view){
+       /* new ProgressTask<Test>(this){
+            @Override
+            protected Test work()throws Exception{
+                return business.getTest(1);//devuelve el enunciado del ejercicio
+            }
+            @Override
+            public void onFinish(Test result){
+                startModelActivity(TestActivity.class,result.getWording());//Lama a la pantalla ExerciseActivity
+            }
+        }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
+
+*/
+
         Intent i=new Intent(this,TestActivity.class);
         startActivity(i);
     }
@@ -47,10 +63,7 @@ public class MenuActivity extends ModelActivity {
             }
             @Override
             public void onFinish(Exercise result){
-                TextView textWording=(TextView)findViewById(R.id.exercise_wording);
-                textWording.setText(result.getWording());
-                startModelActivity(ExerciseActivity.class);
-                Toast.makeText(getApplicationContext(), "onFinish", Toast.LENGTH_SHORT).show();
+                startModelActivity(ExerciseActivity.class,result.getWording());//Lama a la pantalla ExerciseActivity
             }
         }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
 

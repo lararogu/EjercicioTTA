@@ -79,13 +79,13 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
             Test test=new Test();
             myadvise=test.getAdvise();
             group.getChildAt(selected).setBackgroundColor(Color.RED);
-            Toast.makeText(getApplicationContext(), "�Has fallado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Has fallado!", Toast.LENGTH_SHORT).show();
             if(myadvise.advise!=null &&!myadvise.advise.isEmpty()){
                 findViewById(R.id.button_view_advise).setVisibility(View.VISIBLE);
             }
         }
         else {
-            Toast.makeText(getApplicationContext(), "�Correcto!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Correcto!", Toast.LENGTH_SHORT).show();
         }
     }
     //-----------------------------------------------------------------------------------------//

@@ -10,9 +10,12 @@ import android.widget.EditText;
 import android.content.Intent;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ModelActivity {
     public final static String LOGIN ="es.tta.ejemplotta.login";
     public final static String PASSWD ="es.tta.ejemplotta.passwd";
+    public final RestClient rest=new RestClient(baseURL);
+    Business business=new Business(rest);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
