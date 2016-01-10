@@ -3,6 +3,7 @@ package es.tta.ejerciciotta;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.*;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class MainActivity extends ModelActivity {
     public final static String LOGIN ="es.tta.ejemplotta.login";
     public final static String PASSWD ="es.tta.ejemplotta.passwd";
+    public final static String USER ="es.tta.ejemplotta.user";
     public final RestClient rest=new RestClient(baseURL);
     Business business=new Business(rest);
 
@@ -23,16 +25,49 @@ public class MainActivity extends ModelActivity {
     }
 
     //Funcion que recoge el nombre de usuario y passwd y los pasa a la siguiente activity
-    public void login(View view){
-      Intent i=new Intent(this,MenuActivity.class);
+    public void login(final View view){
+     final Intent i=new Intent(this,MenuActivity.class);
         EditText login=(EditText)findViewById(R.id.login);
         EditText passwd=(EditText)findViewById(R.id.passwd);
 
+
         //Si ambos campos (LOGIN y PASSWD estan completados se pasa a la siguiente Activity
         if(!TextUtils.isEmpty(login.getText().toString())&&!TextUtils.isEmpty(passwd.getText().toString())){
-            i.putExtra(LOGIN,login.getText().toString());
-            i.putExtra(PASSWD,passwd.getText().toString());
-            startActivity(i);
+           final String dni=login.getText().toString();
+            final String pass=passwd.getText().toString();
+            rest.setHttpBasicAuth(dni,pass); //se guarda el user y passwd en la cabecera de autenticacion del mensaje http
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Status user=null;
+
+                    try{
+                    user= business.getStatus(dni, pass);
+
+                    }catch(Exception e){
+
+                    }finally {
+                        if(user!=null){
+                            view.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    i.putExtra(LOGIN,dni);
+                                    i.putExtra(PASSWD,pass);
+                                    startActivity(i);
+                                }
+                            });
+                        }else{
+                            Toast.makeText(getApplicationContext(),"Conexion fallida con el servidor",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }).start();
+
+
+
 
         }
         else{

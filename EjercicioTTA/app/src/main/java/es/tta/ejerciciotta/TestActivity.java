@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,29 +27,31 @@ import java.io.IOException;
 public class TestActivity extends ActionBarActivity implements View.OnClickListener{
 
     int correct;
-    Test.Advise myadvise;
+    private Test test;
+    private String myadvise;
+    private String adviseType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        Intent intent=getIntent();
+        test=(Test)intent.getSerializableExtra(MenuActivity.TEST);
 
-        //Creamos un objeto tipo Data
-        Data data=new Data();//business
-        //Obtenemos el metodo getTest definido en la clase Data()
-        Test test=data.getTest();
+        Log.d("tag", "contents:" + test.getwording());
         TextView textWording=(TextView)findViewById(R.id.test_wording);
+
         textWording.setText(test.getwording());//Escribimos la pregunta en pantalla
         RadioGroup group=(RadioGroup)findViewById(R.id.test_choices);
         int i=0;
+
         for(Test.Choice choice : test.getchoices()){//Obtenemos cada una de las respuestas y las asociamos a un radiobutton
             RadioButton radio=new RadioButton(this);
-            radio.setText(choice.getwording());
+            radio.setText(choice.getAnswer());
             radio.setOnClickListener(this);
             group.addView(radio);
             if(choice.isCorrect()){
                 correct=i;
-
             }
             i++;
         }
@@ -76,11 +79,11 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
         View select = group.findViewById(button_selected);//Cogemos la view asociada a ese ID
         int selected = group.indexOfChild(select);
         if(selected!=correct){
-            Test test=new Test();
-            myadvise=test.getAdvise();
+            myadvise = test.getChoice(selected).getAdvise();
+            adviseType = test.getChoice(selected).getMime();
             group.getChildAt(selected).setBackgroundColor(Color.RED);
             Toast.makeText(getApplicationContext(), "Has fallado!", Toast.LENGTH_SHORT).show();
-            if(myadvise.advise!=null &&!myadvise.advise.isEmpty()){
+            if(myadvise!=null &&!myadvise.isEmpty()){
                 findViewById(R.id.button_view_advise).setVisibility(View.VISIBLE);
             }
         }
@@ -91,20 +94,18 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
     //-----------------------------------------------------------------------------------------//
     //Funcion que se ejecuta al pulsar el boton Ver ayuda
     public void advise(View v){
-        Test test=new Test();
-        Test.Advise myadvise=test.getAdvise();
 
-        switch(myadvise.data_type){
-            case "html":
-                showHTML(myadvise.advise);
+        switch(adviseType){
+            case "text/html":
+                showHTML(myadvise);
                 break;
 
-            case "video":
-                showVideo(myadvise.advise);
+            case "video/mp4":
+                showVideo(myadvise);
                 break;
 
-            case "audio":
-                showAudio(myadvise.advise);
+            case "audio/mpeg":
+                showAudio(myadvise);
                 break;
         }
 

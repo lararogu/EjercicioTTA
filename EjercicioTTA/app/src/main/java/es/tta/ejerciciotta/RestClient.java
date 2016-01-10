@@ -25,6 +25,7 @@ public class RestClient {
     private final String baseURL;
     private final Map<String,String> properties=new HashMap<>();
     private static final String TAG = "MyActivity";
+
     public RestClient(String baseURL){
         this.baseURL=baseURL;
 
@@ -71,7 +72,7 @@ public class RestClient {
      try {
          conn = getConnection(path);
          conn.setRequestMethod("GET");
-         //Log.d("tag", "Lara:"+conn.getRequestProperties());
+         Log.d("tag", "Lara:"+conn.getRequestProperties());
          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
          contents += br.readLine();
@@ -81,9 +82,9 @@ public class RestClient {
      } finally {
          if (conn != null) {
              int a = conn.getResponseCode();
-             //Log.d("tag", "getResponseCode:" + a);
-             conn.disconnect();
              Log.d("tag", "contents:" + contents);
+             conn.disconnect();
+
          }
          return contents;
      }

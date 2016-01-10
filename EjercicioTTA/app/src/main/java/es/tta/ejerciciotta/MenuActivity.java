@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class MenuActivity extends ModelActivity {
     public final RestClient rest=new RestClient(baseURL);
     Business business=new Business(rest);
+    public final static String TEST ="es.tta.ejemplotta.test";
 
 
     @Override
@@ -37,21 +38,21 @@ public class MenuActivity extends ModelActivity {
 
     //Funcion que accede a la pantalla TestActivity
     public void test(View view){
-       /* new ProgressTask<Test>(this){
+       new ProgressTask<Test>(this){
             @Override
             protected Test work()throws Exception{
+                Log.d("tag", "onwork enter:");
                 return business.getTest(1);//devuelve el enunciado del ejercicio
+
             }
             @Override
             public void onFinish(Test result){
-                startModelActivity(TestActivity.class,result.getWording());//Lama a la pantalla ExerciseActivity
+                Intent i =new Intent(getApplicationContext(),TestActivity.class);
+                i.putExtra(TEST,result);
+                Log.d("tag", "pregunta:" + result.getwording());
+                startModelActivity(TestActivity.class, result.getwording());//Lama a la pantalla ExerciseActivity
             }
         }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
-
-*/
-
-        Intent i=new Intent(this,TestActivity.class);
-        startActivity(i);
     }
 
     //Funcion que accede a la pantalla ExerciseActivity
@@ -65,7 +66,7 @@ public class MenuActivity extends ModelActivity {
             public void onFinish(Exercise result){
                 startModelActivity(ExerciseActivity.class,result.getWording());//Lama a la pantalla ExerciseActivity
             }
-        }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
+        }.execute();//primero se ejecuta el metodo onPreExecute (de ProgressTask) y despues el doInBackground
 
     }
 

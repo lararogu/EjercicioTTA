@@ -2,23 +2,31 @@ package es.tta.ejerciciotta;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by LARA MARIA on 15/12/2015.
  */
-public class Test {
+public class Test implements Serializable{
 
-    //RestClient rest=new RestClient("http://u017633.ehu.eus:18080/AlumnoTta/rest/tta");
-    String wording="Enunciado primera pregunta";
-    String id;
-   // private Choice[] choices;
+
+    String wording=null;
+    public Choice[] choices;
 
     //String advise="http://www.wikipedia.com";
     //String advise="<html><body>Fallooooo</body></html>";
 
 
-    public Test(){
+    public Test(String wording,int [] choicesId, String [] choicesAnswer,boolean [] choicesCorrect, String [] choicesAdvise, String [] choicesAdvType){
 
-    }
+        this.wording = wording;
+        int length=choicesId.length;
+        for (int i = 0; i < length; i++) {
+            choices[i] = new Choice(choicesId[i],choicesAnswer[i],choicesCorrect[i],choicesAdvise[i],choicesAdvType[i]);
+        }
+
+            }
+
 
     public Advise getAdvise(){
         //Advise advise=new Advise("http://www.wikipedia.com","html");
@@ -35,58 +43,67 @@ public class Test {
         this.wording=wording;
     }
 
-    public void setId(String id){
-        this.id=id;
-    }
 
     public Choice[] getchoices(){
-        Choice[] choices=new Choice[4];
-        choices[0]=new Choice("Respuesta1",true);
-        choices[1]=new Choice("Respuesta2",false);
-        choices[2]=new Choice("Respuesta3",false);
-        choices[3]=new Choice("Respuesta4",false);
-
         return choices;
+    }
+
+    public Choice getChoice(int i){
+        return choices[i];
     }
 
 
     //Clase que almacena las posibles respuestas de una pregunta
-    public static class Choice{
-        String wording;
+    public class Choice{
+        String answer;
         boolean correct;
-       // int id;
-        //String advise;
+        int id;
+        String advise;
+        String mime;
 
-
-        public Choice(String wording,boolean correct){
-            this.wording=wording;
-            this.correct=correct;
+        public Choice(int id, String answer,boolean correct, String advise, String advType){
+            this.id = id;
+            this.answer = answer;
+            this.correct = correct;
+            this.advise = advise;
+            this.mime = advType;
         }
 
-        public String getwording(){
-            return wording;
+        public void setAnswer(String answer){
+            this.answer=answer;
+        }
+        public String getAnswer(){
+            return answer;
         }
         public boolean isCorrect(){
             return correct;
         }
 
-        public void setwording(String wording){
-            this.wording=wording;
-        }
-
-        /*
         public void setId(int id){
             this.id=id;
-        }*/
+        }
+        public int getId(){
+          return id;
+        }
 
         public void setCorrect(Boolean correct){
             this.correct=correct;
         }
-/*
+
         public void setAdvise(String advise){
             this.advise=advise;
-        }*/
+        }
 
+        public String getAdvise(){
+           return advise;
+        }
+        public void setMime(String mime){
+            this.mime=mime;
+        }
+
+        public String getMime(){
+           return mime;
+        }
 
     }
 

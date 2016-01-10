@@ -5,8 +5,5 @@ package es.tta.ejerciciotta;
  */
 public class Data {
 
-    public Test getTest(){
-        Test test =new Test();
-        return test;
-    }
+
 }

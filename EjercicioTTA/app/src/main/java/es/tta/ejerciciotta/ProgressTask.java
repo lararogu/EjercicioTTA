@@ -36,7 +36,7 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
         }
         catch(Exception e){
             this.e=e;
-
+            Log.d("tag", "FALLOOOO");
         }
         return result;
     }
@@ -56,6 +56,6 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
     }
 
     protected abstract T work() throws Exception;
-    public abstract void onFinish(T result);
+    protected abstract void onFinish(T result);
 
 }
