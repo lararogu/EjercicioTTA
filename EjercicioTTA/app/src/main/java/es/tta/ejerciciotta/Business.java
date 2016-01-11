@@ -2,13 +2,16 @@ package es.tta.ejerciciotta;
 
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.net.Uri;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import es.tta.ejerciciotta.Test.Choice;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by LARA MARIA on 28/12/2015.
@@ -31,15 +34,14 @@ public class Business {
        String [] choicesAdvise = new String[length];
        String [] choicesAdvType = new String[length];
        int [] choicesId = new int[length];
-       Log.d("tag", "getTest 1:" + array.length());
-        for(int i=0;i<array.length();i++){
-            Log.d("tag", "entrando en el for:");
+        for(int i=0;i<length;i++){
             JSONObject item=array.getJSONObject(i);
 
             choicesId[i] = item.getInt("id");
             choicesAnswer[i] = item.getString("answer");
             choicesAdvise[i] = item.getString("advise");
             choicesCorrect[i] = item.getBoolean("correct");
+
             if(item.isNull("resourceType")){
                 choicesAdvType[i] = "null";
             }else{
@@ -47,8 +49,9 @@ public class Business {
             }
 
         }
+
        Test test = new Test(wording,choicesId,choicesAnswer,choicesCorrect,choicesAdvise,choicesAdvType);
-       Log.d("tag", "getTest finished:" + test.getwording());
+
        return test;
 
     }
@@ -67,7 +70,7 @@ public class Business {
 
 
     public Status getStatus(String dni,String passwd)throws IOException,JSONException{
-        JSONObject json=rest.getJson(String.format("getStatus?dni=%s", dni));//Recogemos el ejercicio en formato JSON
+        JSONObject json=rest.getJson(String.format("getStatus?dni=%s", dni));//Recogemos el status en formato JSON
         Status userStatus=new Status(dni,passwd);
         userStatus.setId(json.getInt("id"));
         userStatus.setName(json.getString("user"));
@@ -78,5 +81,26 @@ public class Business {
         return userStatus;
 
     }
+
+    public int postTest(int user,int id)throws IOException,JSONException{
+        JSONObject json=new JSONObject();
+        json.put("userId",user);
+        json.put("choiceId",id);
+        int codeResponse=rest.postJson(json, "postChoice");//Recogemos el codigo de rspuesta del mensahe POST al servidor
+        Log.d("tag", "coderesponse:"+codeResponse);
+        return codeResponse;
+
+    }
+
+    public int postExercise(Uri file,String fileName,int userid,int exercise)throws IOException,JSONException{
+        String path="postExercise?user="+userid+"&id="+exercise;
+        InputStream is=new FileInputStream(file.getPath());
+        int codeResponse=rest.postFile(path,is,fileName);//Recogemos el codigo de rspuesta del mensaje POST al servidor
+        Log.d("tag", "coderesponse:"+codeResponse);
+        return codeResponse;
+
+    }
+
+
 
 }

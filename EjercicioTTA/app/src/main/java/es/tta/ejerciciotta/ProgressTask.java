@@ -36,7 +36,7 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
         }
         catch(Exception e){
             this.e=e;
-            Log.d("tag", "FALLOOOO");
+
         }
         return result;
     }
@@ -50,9 +50,9 @@ public abstract class ProgressTask<T> extends AsyncTask<Void,Void,T>{
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         else
-            Log.d("tag", "Lara:ejecutar onFinish");
+
             onFinish(result);
-            Log.d("tag", "Lara:onfinish");
+
     }
 
     protected abstract T work() throws Exception;

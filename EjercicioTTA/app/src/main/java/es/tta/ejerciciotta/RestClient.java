@@ -72,7 +72,6 @@ public class RestClient {
      try {
          conn = getConnection(path);
          conn.setRequestMethod("GET");
-         Log.d("tag", "Lara:"+conn.getRequestProperties());
          BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
          contents += br.readLine();
@@ -81,8 +80,7 @@ public class RestClient {
          i.printStackTrace();
      } finally {
          if (conn != null) {
-             int a = conn.getResponseCode();
-             Log.d("tag", "contents:" + contents);
+
              conn.disconnect();
 
          }
@@ -107,7 +105,7 @@ public class RestClient {
         finally {
             if (conn != null) {
                 conn.disconnect();
-               // Log.d("tag", "LARA:disconect ");
+
             }
 
         }
@@ -140,7 +138,7 @@ public int postFile(String path,InputStream is,String fileName)throws IOExceptio
     finally {
         if (conn != null) {
             conn.disconnect();
-            Log.d("tag", "LARA:disconect ");
+
         }
 
     }

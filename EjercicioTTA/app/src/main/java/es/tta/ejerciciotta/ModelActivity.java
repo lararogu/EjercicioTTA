@@ -15,4 +15,5 @@ public class ModelActivity extends AppCompatActivity {
         i.putExtra(VALUE,value);
         startActivity(i);
     }
+
 }

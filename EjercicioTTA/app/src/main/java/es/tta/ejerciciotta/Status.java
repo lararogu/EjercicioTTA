@@ -1,9 +1,11 @@
 package es.tta.ejerciciotta;
 
+import java.io.Serializable;
+
 /**
  * Created by LARA MARIA on 09/01/2016.
  */
-public class Status {
+public class Status implements Serializable{
 
     public int id;
     public String name;
@@ -68,5 +70,15 @@ public class Status {
     public void setnextEx(int nextExercise){
         this.nextExercise=nextExercise;
     }
+
+    public String getDni(){
+
+        return dni;
+    }
+    public String getpass(){
+
+        return pass;
+    }
+
 
 }

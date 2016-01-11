@@ -16,7 +16,7 @@ public class MainActivity extends ModelActivity {
     public final static String PASSWD ="es.tta.ejemplotta.passwd";
     public final static String USER ="es.tta.ejemplotta.user";
     public final RestClient rest=new RestClient(baseURL);
-    Business business=new Business(rest);
+    final Business business=new Business(rest);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,8 @@ public class MainActivity extends ModelActivity {
 
             new Thread(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {//nuevo hilo para conexion con el servidor
                     Status user=null;
-
                     try{
                     user= business.getStatus(dni, pass);
 
@@ -49,12 +48,13 @@ public class MainActivity extends ModelActivity {
 
                     }finally {
                         if(user!=null){
+                            i.putExtra(LOGIN,dni);
+                            i.putExtra(PASSWD,pass);
+                            i.putExtra(USER,user);
                             view.post(new Runnable() {
                                 @Override
                                 public void run() {
 
-                                    i.putExtra(LOGIN,dni);
-                                    i.putExtra(PASSWD,pass);
                                     startActivity(i);
                                 }
                             });

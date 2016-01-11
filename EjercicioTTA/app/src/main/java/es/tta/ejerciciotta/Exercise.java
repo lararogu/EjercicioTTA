@@ -1,9 +1,11 @@
 package es.tta.ejerciciotta;
 
+import java.io.Serializable;
+
 /**
  * Created by LARA MARIA on 28/12/2015.
  */
-public class Exercise {
+public class Exercise implements Serializable{
 
     private int id;
     private String wording;

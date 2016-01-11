@@ -1,5 +1,7 @@
 package es.tta.ejerciciotta;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -13,27 +15,18 @@ public class Test implements Serializable{
     String wording=null;
     public Choice[] choices;
 
-    //String advise="http://www.wikipedia.com";
-    //String advise="<html><body>Fallooooo</body></html>";
-
 
     public Test(String wording,int [] choicesId, String [] choicesAnswer,boolean [] choicesCorrect, String [] choicesAdvise, String [] choicesAdvType){
 
         this.wording = wording;
-        int length=choicesId.length;
+        int length=choicesAnswer.length;
+        choices = new Choice[length];
+
         for (int i = 0; i < length; i++) {
             choices[i] = new Choice(choicesId[i],choicesAnswer[i],choicesCorrect[i],choicesAdvise[i],choicesAdvType[i]);
         }
 
             }
-
-
-    public Advise getAdvise(){
-        //Advise advise=new Advise("http://www.wikipedia.com","html");
-        //Advise advise=new Advise("sdcard/Whatsapp/Media/Whatsapp Video/VID-20151216-WA0004.3gp","video");
-        Advise advise=new Advise("sdcard/Ringtones/hangouts_message.ogg","audio");
-        return advise;
-    }
 
     public String getwording(){
         return wording;
@@ -54,7 +47,7 @@ public class Test implements Serializable{
 
 
     //Clase que almacena las posibles respuestas de una pregunta
-    public class Choice{
+    public class Choice implements Serializable {
         String answer;
         boolean correct;
         int id;
@@ -105,17 +98,6 @@ public class Test implements Serializable{
            return mime;
         }
 
-    }
-
-    public class Advise{
-        String advise;
-        String data_type;
-
-
-        public Advise(String advise,String data_type){
-            this.advise=advise;
-            this.data_type=data_type;
-        }
     }
 
 

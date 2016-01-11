@@ -24,21 +24,24 @@ import android.widget.MediaController;
 import java.io.IOException;
 
 
-public class TestActivity extends ActionBarActivity implements View.OnClickListener{
+public class TestActivity extends ModelActivity implements View.OnClickListener{
 
     int correct;
     private Test test;
     private String myadvise;
     private String adviseType;
+    private Status user;
+    public final RestClient rest=new RestClient(baseURL);
+    Business business=new Business(rest);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
         Intent intent=getIntent();
-        test=(Test)intent.getSerializableExtra(MenuActivity.TEST);
-
-        Log.d("tag", "contents:" + test.getwording());
+        test=(Test)intent.getSerializableExtra(MenuActivity.TEST);//recogemos el objeto Test
+        user=(Status)intent.getSerializableExtra(MainActivity.USER);//recogemos el objeto Status
         TextView textWording=(TextView)findViewById(R.id.test_wording);
 
         textWording.setText(test.getwording());//Escribimos la pregunta en pantalla
@@ -64,7 +67,7 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
 
 //-----------------------------------------------------------------------------------------//
     //Funcion que se ejecuta al pulsar el boton Enviar
-    public void send(View v){
+    public void send(final View v){
         RadioGroup group=(RadioGroup)findViewById(R.id.test_choices);
         int choices=group.getChildCount();
         for(int i=0;i<choices;i++){
@@ -77,7 +80,7 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
         group.getChildAt(correct).setBackgroundColor(Color.GREEN);
         int button_selected= group.getCheckedRadioButtonId();//ID de la respuesta elegida por el usuario
         View select = group.findViewById(button_selected);//Cogemos la view asociada a ese ID
-        int selected = group.indexOfChild(select);
+        final int selected = group.indexOfChild(select);
         if(selected!=correct){
             myadvise = test.getChoice(selected).getAdvise();
             adviseType = test.getChoice(selected).getMime();
@@ -90,6 +93,29 @@ public class TestActivity extends ActionBarActivity implements View.OnClickListe
         else {
             Toast.makeText(getApplicationContext(), "Correcto!", Toast.LENGTH_SHORT).show();
         }
+
+
+        //Enviar test al servidor
+        rest.setHttpBasicAuth(user.getDni(), user.getpass());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {//nuevo hilo para conexion con el servidor
+                try {
+                    business.postTest(user.getId(), selected);
+
+                } catch (Exception e) {
+                    v.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Error al conectar con servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }
+        }).start();
+
+
     }
     //-----------------------------------------------------------------------------------------//
     //Funcion que se ejecuta al pulsar el boton Ver ayuda

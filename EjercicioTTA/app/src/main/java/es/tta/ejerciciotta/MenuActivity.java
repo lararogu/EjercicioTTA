@@ -16,7 +16,8 @@ public class MenuActivity extends ModelActivity {
     public final RestClient rest=new RestClient(baseURL);
     Business business=new Business(rest);
     public final static String TEST ="es.tta.ejemplotta.test";
-
+    public final static String EXERCISE ="es.tta.ejemplotta.exercise";
+    Status user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +29,10 @@ public class MenuActivity extends ModelActivity {
 
         //Obtenemos del intent el nombre de usuario introducido en la pantalla de login
         Intent i=getIntent();
+       user=(Status)i.getSerializableExtra(MainActivity.USER);
         String usuario=i.getStringExtra(MainActivity.LOGIN);
         String passwd=i.getStringExtra(MainActivity.PASSWD);
-        textMessage.setText("Bienvenido " + usuario);
+        textMessage.setText("Bienvenido " + user.getName());
         rest.setHttpBasicAuth(usuario, passwd); //se guarda el user y passwd en la cabecera de autenticacion del mensaje http
 
 
@@ -41,16 +43,16 @@ public class MenuActivity extends ModelActivity {
        new ProgressTask<Test>(this){
             @Override
             protected Test work()throws Exception{
-                Log.d("tag", "onwork enter:");
+
                 return business.getTest(1);//devuelve el enunciado del ejercicio
 
             }
             @Override
             public void onFinish(Test result){
                 Intent i =new Intent(getApplicationContext(),TestActivity.class);
-                i.putExtra(TEST,result);
-                Log.d("tag", "pregunta:" + result.getwording());
-                startModelActivity(TestActivity.class, result.getwording());//Lama a la pantalla ExerciseActivity
+                i.putExtra(TEST, result);
+                i.putExtra(MainActivity.USER,user);
+                startActivity(i);
             }
         }.execute();//primero se ejecuta el metodo onPreExecute y despues el doInBackground
     }
@@ -64,7 +66,10 @@ public class MenuActivity extends ModelActivity {
             }
             @Override
             public void onFinish(Exercise result){
-                startModelActivity(ExerciseActivity.class,result.getWording());//Lama a la pantalla ExerciseActivity
+                Intent i =new Intent(getApplicationContext(),ExerciseActivity.class);
+                i.putExtra(EXERCISE, result);
+                i.putExtra(MainActivity.USER,user);
+                startActivity(i);
             }
         }.execute();//primero se ejecuta el metodo onPreExecute (de ProgressTask) y despues el doInBackground
 
